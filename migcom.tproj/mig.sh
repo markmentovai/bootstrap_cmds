@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Copyright (c) 1999-2008 Apple Inc. All rights reserved.
 #

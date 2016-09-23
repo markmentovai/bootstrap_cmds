@@ -406,7 +406,6 @@ typedef struct routine
 
     boolean_t rtSimpleRequest;
     boolean_t rtSimpleReply;
-    boolean_t rtUseSpecialReplyPort;
 
     u_int rtNumRequestVar;      /* number of variable/inline args in request */
     u_int rtNumReplyVar;        /* number of variable/inline args in reply */

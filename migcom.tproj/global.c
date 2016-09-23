@@ -68,8 +68,6 @@ boolean_t IsVoucherCodeAllowed = TRUE;
 
 boolean_t IsKernelUser = FALSE;
 boolean_t IsKernelServer = FALSE;
-boolean_t UseSpecialReplyPort = FALSE;
-boolean_t HasUseSpecialReplyPort = FALSE;
 
 string_t RCSId = strNULL;
 
@@ -141,8 +139,5 @@ more_global()
     else
       ServerSubsys = SubsystemName;
     ServerSubsys = strconcat(ServerSubsys, "_subsystem");
-  }
-  if (HasUseSpecialReplyPort && !BeAnsiC) {
-    fatal("Cannot use UseSpecialReplyPort in non ANSI mode\n");
   }
 }
