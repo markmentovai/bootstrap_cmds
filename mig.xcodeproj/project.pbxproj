@@ -280,8 +280,10 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "MIG_VERSION=\\\"$(RC_ProjectNameAndSourceVersion)\\\"";
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/migcom.tproj/xcode";
 				INSTALL_PATH = "$(DT_TOOLCHAIN_DIR)/usr/libexec";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				YACC_GENERATED_FILE_STEM = InputFileStem;
 			};
 			name = Release;
 		};
