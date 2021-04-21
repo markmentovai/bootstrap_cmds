@@ -1,0 +1,9 @@
+*~
+.*.sw?
+.DS_Store
+.gdb_history
+.gdbinit
+/build/
+/mig.xcodeproj/project.xcworkspace/
+/mig.xcodeproj/xcuserdata/
+tags
