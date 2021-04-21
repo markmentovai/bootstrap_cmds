@@ -1,6 +1,7 @@
 BUILT_SOURCES = parser.h
 AM_YFLAGS = -d
-AM_CPPFLAGS = -DMIG_VERSION=\"$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)\"
+AM_CPPFLAGS = -DMIG_VERSION=\"$(PACKAGE_TARNAME)-$(PACKAGE_VERSION)\" \
+              $(COMPAT_CPPFLAGS)
 bin_PROGRAMS = migcom
 migcom_SOURCES = alloc.h \
                  error.c \
@@ -35,4 +36,5 @@ install-exec-hook:
 dist_man_MANS = mig.1 \
                 migcom.1
 
-EXTRA_DIST = handler.c
+EXTRA_DIST = handler.c \
+             xcode/parser.h

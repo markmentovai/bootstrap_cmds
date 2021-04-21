@@ -57,7 +57,7 @@ extern int lineno;
 extern char *yyinname;
 
 static char *program;
-__private_extern__
+__attribute__((visibility("hidden")))
 int mig_errors = 0;
 
 /*ARGSUSED*/
@@ -74,7 +74,7 @@ fatal(char *format, ...)
   exit(1);
 }
 
-__private_extern__
+__attribute__((visibility("hidden")))
 /*ARGSUSED*/
 /*VARARGS1*/
 void

@@ -38,13 +38,9 @@
 #define _TYPE_H
 
 #include <mach/boolean.h>
+#include <sys/types.h>
 #include "strdefs.h"
 
-#ifdef linux
-#include <linux/types.h>
-#else /* linux */
-#include <sys/types.h>
-#endif /* linux */
 typedef u_int ipc_flags_t;
 
 /*

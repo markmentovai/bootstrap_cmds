@@ -65,7 +65,13 @@ realpath()
 
 scriptPath=$(realpath "$0")
 scriptRoot=$(dirname "$scriptPath")
-migcomPath=$(realpath "${scriptRoot}/../libexec/migcom")
+if [[ -x "${scriptRoot}/migcom" ]]; then
+  migcomPath=$(realpath "${scriptRoot}/migcom")
+elif [[ -x "${scriptRoot}/../libexec/migcom" ]]; then
+  migcomPath=$(realpath "${scriptRoot}/../libexec/migcom")
+else
+  migcomPath=migcom
+fi
 
 if [ -n "${SDKROOT}" ]; then
 	sdkRoot="${SDKROOT}";
@@ -75,8 +81,12 @@ if [ -z "${MIGCC}" ]; then
   xcrunPath="/usr/bin/xcrun"
   if [ -x "${xcrunPath}" ]; then
     MIGCC=`"${xcrunPath}" -sdk "$sdkRoot" -find cc`
-  else
+  elif [[ -x "${scriptRoot}/cc" ]]; then
     MIGCC=$(realpath "${scriptRoot}/cc")
+  elif type clang >& /dev/null; then
+    MIGCC=clang
+  else
+    MIGCC=cc
   fi
 fi
 
@@ -91,9 +101,17 @@ fi
 cppflags="-D__MACH30__"
 
 files=
-arch=`/usr/bin/arch`
+uname_s=$(uname -s)
+case "${uname_s}" in
+  Darwin)
+    arch=(-arch "$(/usr/bin/arch)")
+    ;;
+  *)
+    arch=()
+    ;;
+esac
 
-WORKTMP=`/usr/bin/mktemp -d "${TMPDIR:-/tmp}/mig.XXXXXX"`
+WORKTMP=`mktemp -d "${TMPDIR:-/tmp}/mig.XXXXXX"`
 if [ $? -ne 0 ]; then
       echo "Failure creating temporary work directory: ${WORKTMP}"
       echo "Exiting..."
@@ -113,7 +131,18 @@ do
 	-sheader ) sheader="$2"; migflags=( "${migflags[@]}" "$1" "$2"); shift; shift;;
 	-iheader ) iheader="$2"; migflags=( "${migflags[@]}" "$1" "$2"); shift; shift;;
 	-dheader ) dheader="$2"; migflags=( "${migflags[@]}" "$1" "$2"); shift; shift;;
-	-arch ) arch="$2"; shift; shift;;
+	-arch)
+	  case "${uname_s}" in
+	    Darwin)
+	      arch=("${1}" "${2}")
+              ;;
+            *)
+              arch=("-target" "${2}-apple-darwin")
+              ;;
+          esac
+	  shift
+	  shift
+	  ;;
 	-target ) target=( "$1" "$2"); shift; shift;;
 	-maxonstack ) migflags=( "${migflags[@]}" "$1" "$2"); shift; shift;;
 	-split ) migflags=( "${migflags[@]}" "$1" ); shift;;
@@ -168,7 +197,7 @@ do
     fi
     rm -f "${temp}.c" "${temp}.d"
     (echo '#line 1 '\"${file}\" ; cat "${file}" ) > "${temp}.c"
-    "$C" -E -arch ${arch} "${target[@]}" "${cppflags[@]}" -I "${sourcedir}" "${iSysRootParm[@]}" "${temp}.c" | "$M" "${migflags[@]}"
+    "$C" -E "${arch[@]}" "${target[@]}" "${cppflags[@]}" -I "${sourcedir}" "${iSysRootParm[@]}" "${temp}.c" | "$M" "${migflags[@]}"
     if [ $? -ne 0 ]
     then
       rm -rf "${temp}.c" "${temp}.d" "${WORKTMP}"

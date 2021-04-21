@@ -8,4 +8,16 @@ AC_CONFIG_FILES([
   Makefile
   migcom.tproj/Makefile
 ])
+
+AC_CANONICAL_HOST()
+case "${host}" in
+  *-apple-darwin*)
+    COMPAT_CPPFLAGS=
+    ;;
+  *)
+    COMPAT_CPPFLAGS='-I$(top_srcdir)/compat/non_apple'
+    ;;
+esac
+AC_SUBST([COMPAT_CPPFLAGS])
+
 AC_OUTPUT()
