@@ -1,4 +1,4 @@
-AC_INIT([bootstrap_cmds], [121.100.1])
+AC_INIT([bootstrap_cmds], [122])
 AC_CONFIG_AUX_DIR([autotools])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC()
